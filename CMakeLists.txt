@@ -21,7 +21,21 @@ if(MSVC)
 endif()
 
 set(CHESS_SRCS
-    main.cpp)
+    bishop.hpp
+    bishop.cpp
+    chess_piece.hpp
+    chess_piece.cpp
+    king.hpp
+    king.cpp
+    knight.hpp
+    knight.cpp
+    main.cpp
+    pawn.hpp
+    pawn.cpp
+    queen.hpp
+    queen.cpp
+    rook.hpp
+    rook.cpp)
 
 set(CHESS_TARGET chess)
 add_executable(${CHESS_TARGET} ${CHESS_SRCS})
