@@ -24,6 +24,7 @@ namespace chess
         using reverse_iterator = typename base_type::reverse_iterator;
         using const_reverse_iterator = typename base_type::const_reverse_iterator;
 
+        chess_array() = default;
         chess_array(std::initializer_list<T> init);
 
         reference operator[](char c);
