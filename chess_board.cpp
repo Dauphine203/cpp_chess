@@ -28,7 +28,7 @@ namespace chess
 
     bool chess_board::can_move(const position_type& from, const position_type& to) const
     {
-        chess_piece* pce = m_board[from.first][from.second];
+        chess_piece* pce = piece(from);
         if (pce)
         {
             return pce->can_move(to);
@@ -42,21 +42,29 @@ namespace chess
     void chess_board::move(const position_type& from, const position_type& to)
     {
         // Updates chess piece
-        chess_piece* pce = m_board[from.first][from.second];
+        chess_piece* pce = piece(from);
         pce->move(to);
         // Updates chess board - first deletes piece at th destination
         // position if there is one (since the move is valid, it means
         // that the piece is taken by another one)
-        chess_piece* must_die = m_board[to.first][to.second];
+        chess_piece* must_die = piece(to);
         if (must_die != nullptr)
         {
             delete must_die;
         }
-        // this notation with [] everywhere is not super expressive
-        // Let's keep that in mind and fix it later
-        m_board[to.first][to.second] = pce;
-        m_board[from.first][from.second] = nullptr;
+        piece(to) = pce;
+        piece(from) = nullptr;
 
+    }
+
+    chess_board::piece_ptr& chess_board::piece(const position_type& pos)
+    {
+        return m_board[pos.first][pos.second];
+    }
+
+    const chess_board::piece_ptr& chess_board::piece(const position_type& pos) const
+    {
+        return m_board[pos.first][pos.second];
     }
 }
 

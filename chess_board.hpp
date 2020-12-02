@@ -32,6 +32,13 @@ namespace chess
 
     private:
 
+        using piece_ptr = chess_piece*;
+
+        // Yes, reference on pointer ;). This allows assigning the pointer
+        // a different address, making it point to another memory location.
+        piece_ptr& piece(const position_type& pos);
+        const piece_ptr& piece(const position_type& pos) const;
+
         chess_array<std::array<chess_piece*, 8>> m_board;
     };
 }
