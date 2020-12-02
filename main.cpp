@@ -6,6 +6,8 @@
 #include <string>
 #include <utility>
 
+#include "chess_board.hpp"
+
 // WINDOWS
 // mkdir build
 // cd build
@@ -43,7 +45,6 @@ namespace chess
         std::cout << "+----+----+----+----+----+----+----+----+----+ " << std::endl;
     }
 
-    using position_type = std::pair<char, int>;
     using move_type = std::pair<position_type, position_type>;
 
     void get_move(std::string input, move_type& pos)
@@ -65,9 +66,10 @@ namespace chess
         }
 
         pos.first.first = tmp[0][0];
-        pos.first.second = stoi(tmp[1]);
+        // Users enter position starting at 1 while C++ arrays start at 0
+        pos.first.second = stoi(tmp[1]) - 1;
         pos.second.first = tmp[2][0];
-        pos.second.second = stoi(tmp[3]);
+        pos.second.second = stoi(tmp[3]) - 1;
     }
 }
 

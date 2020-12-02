@@ -23,6 +23,8 @@ endif()
 set(CHESS_SRCS
     bishop.hpp
     bishop.cpp
+    chess_board.hpp
+    chess_board.cpp
     chess_piece.hpp
     chess_piece.cpp
     king.hpp
