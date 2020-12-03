@@ -13,5 +13,10 @@ namespace chess
         // it later
         return false;
     }
+
+    void pawn::print(std::ostream& out) const
+    {
+        out << "P" << get_color();
+    }
 }
 

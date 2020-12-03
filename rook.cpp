@@ -13,5 +13,10 @@ namespace chess
         // it later
         return false;
     }
+
+    void rook::print(std::ostream& out) const
+    {
+        out << "R" << get_color();
+    }
 }
 

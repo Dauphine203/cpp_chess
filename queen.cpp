@@ -13,5 +13,10 @@ namespace chess
         // it later
         return false;
     }
+
+    void queen::print(std::ostream& out) const
+    {
+        out << "P" << get_color();
+    }
 }
 

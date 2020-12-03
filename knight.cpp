@@ -13,5 +13,10 @@ namespace chess
         // it later
         return false;
     }
+
+    void knight::print(std::ostream& out) const
+    {
+        out << "N" << get_color();
+    }
 }
 

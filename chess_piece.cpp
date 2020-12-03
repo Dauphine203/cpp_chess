@@ -22,5 +22,10 @@ namespace chess
     {
     }
 
+    std::ostream& operator<<(std::ostream& out, const chess_piece& pce)
+    {
+        pce.print(out);
+        return out;
+    }
 }
 

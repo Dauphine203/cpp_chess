@@ -34,6 +34,8 @@ set(CHESS_SRCS
     main.cpp
     pawn.hpp
     pawn.cpp
+    piece_factory.hpp
+    piece_factory.cpp
     queen.hpp
     queen.cpp
     rook.hpp
