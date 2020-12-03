@@ -19,20 +19,19 @@ namespace chess
         bool diag = (new_pos.first == current_pos.first + 1 || new_pos.first + 1 == current_pos.first)
             && (new_pos.second == current_pos.second + 1u);
         
-        color opp_color = get_opposite_color();
         if (diag)
         {
-            valid = cb(new_pos, opp_color);
+            valid = cb(new_pos, get_opposite_color());
         }
         else if(adv_1)
         {
-            valid = !cb(new_pos, opp_color);
+            valid = !cb(new_pos, 'a');
         }
         else if(adv_2)
         {
             valid = !m_has_moved;
-            valid &= !cb(position_type(current_pos.first, current_pos.second + 1), opp_color);
-            valid &= !cb(new_pos, opp_color);
+            valid &= !cb(position_type(current_pos.first, current_pos.second + 1), 'a');
+            valid &= !cb(new_pos, 'a');
         }
         return valid;
     }

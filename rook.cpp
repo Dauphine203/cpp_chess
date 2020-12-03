@@ -34,7 +34,7 @@ namespace chess
                     valid = !cb(position_type(i, new_pos.second), 'a');
                 }
             }
-            valid &= (!cb(new_pos, 'a') || cb(new_pos, get_opposite_color()));
+            valid &= !cb(new_pos, get_color());
         }
         return valid;
     }
