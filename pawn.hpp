@@ -16,6 +16,7 @@ namespace chess
         bool can_move(const position_type& new_pos,
                       const has_piece_callback& cb) const override;
         void print(std::ostream& out) const override;
+        void notify_move() override;
 
     private:
 

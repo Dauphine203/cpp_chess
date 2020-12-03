@@ -19,7 +19,7 @@ namespace chess
         bool diag = (new_pos.first == current_pos.first + 1 || new_pos.first + 1 == current_pos.first)
             && (new_pos.second == current_pos.second + 1u);
         
-        opp_color = get_opposite_color();
+        color opp_color = get_opposite_color();
         if (diag)
         {
             valid = cb(new_pos, opp_color);
@@ -40,6 +40,11 @@ namespace chess
     void pawn::print(std::ostream& out) const
     {
         out << "P" << get_color();
+    }
+
+    void pawn::notify_move()
+    {
+        m_has_moved = true;
     }
 }
 

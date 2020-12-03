@@ -55,6 +55,13 @@ namespace chess
                               const has_piece_callback& cb) const = 0;
         virtual void print(std::ostream& out) const = 0;
 
+        // Some implementation of can_move depends on whether the
+        // piece has already moved or not (typically the pawn).
+        // Therefore, we need a way to tell the piece that it has moved.
+        // However, most of the pieces don't need this information, so
+        // we provide a default implementation that does nothing.
+        virtual void notify_move();
+
     protected:
 
         // Let's emphasize the entity semantic by defining

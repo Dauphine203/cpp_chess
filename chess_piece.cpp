@@ -22,6 +22,11 @@ namespace chess
         m_position = new_pos;
     }
 
+    // Default implementation does nothing
+    void chess_piece::notify_move()
+    {
+    }
+
     chess_piece::chess_piece(color c, const position_type& pos)
         : m_color(c), m_position(pos)
     {
