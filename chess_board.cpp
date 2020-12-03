@@ -2,6 +2,9 @@
 #include "chess_board.hpp"
 #include "piece_factory.hpp"
 
+// This is required to use the _1, and _2 placeholders
+using namespace std::placeholders;
+
 namespace chess
 {
     chess_board::chess_board()
@@ -49,6 +52,20 @@ namespace chess
         m_board['f'][7] = make_bishop('b', {'f', 7});
         m_board['g'][7] = make_knight('b', {'g', 7});
         m_board['h'][7] = make_rook('b', {'h', 7});
+
+        // std::function constructor accepts function objects,
+        // that is, functions and classes defining operator().
+        // has_piece is not a function but a method, it can
+        // not be invoked this way: has_piece(pos, c), but
+        // has to be called on an object: my_chess_board.has_piece(pos, c);
+        // Therefore, we need to "bind" the method to the current instance
+        // of chess_board (that is, this).
+        // We take the address of a method M of a class C with the syntax
+        // &M::C
+        // We use placeholders _1 and _2 to tall the compiler that we
+        // don't bind values to arguments of the function.
+        // More on bind can be found at https://en.cppreference.com/w/cpp/utility/functional/bind
+        m_callback = std::bind(&chess_board::has_piece, this, _1, _2);
     }
 
     chess_board::~chess_board()
@@ -63,13 +80,12 @@ namespace chess
         });
     }
 
-
     bool chess_board::can_move(const position_type& from, const position_type& to) const
     {
         chess_piece* pce = piece(from);
         if (pce)
         {
-            return pce->can_move(to);
+            return pce->can_move(to, m_callback);
         }
         else
         {
@@ -128,6 +144,12 @@ namespace chess
     const chess_board::piece_ptr& chess_board::piece(const position_type& pos) const
     {
         return m_board[pos.first][pos.second];
+    }
+
+    bool chess_board::has_piece(const position_type& pos, color c) const
+    {
+        piece_ptr pce = piece(pos);
+        return pce && (c == 'a' || pce->get_color() == c);
     }
 
     void chess_board::print_separator(std::ostream& out) const

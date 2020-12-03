@@ -43,9 +43,16 @@ namespace chess
         piece_ptr& piece(const position_type& pos);
         const piece_ptr& piece(const position_type& pos) const;
 
+        // We 
+        bool has_piece(const position_type& pos, color c) const;
+
         void print_separator(std::ostream& out) const;
 
         chess_array<std::array<chess_piece*, 8>> m_board;
+        // We store the callback as a member so that we don't have to
+        // instantiate it each time we need to call can_move. This is more
+        // efficient.
+        has_piece_callback m_callback;
     };
 }
 

@@ -13,7 +13,8 @@ namespace chess
         bishop(color c, const position_type& pos);
         virtual ~bishop() = default;
         
-        bool can_move(const position_type& new_pos) const override;
+        bool can_move(const position_type& new_pos,
+                      const has_piece_callback& cb) const override;
         void print(std::ostream& out) const override;
     };
 }
