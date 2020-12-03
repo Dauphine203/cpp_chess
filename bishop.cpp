@@ -7,7 +7,8 @@ namespace chess
     {
     }
 
-    bool bishop::can_move(const position_type& new_pos) const
+    bool bishop::can_move(const position_type& new_pos,
+                          const has_piece_callback& cb) const
     {
         // Let's return false for now, we'll implement
         // it later
