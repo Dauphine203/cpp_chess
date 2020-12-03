@@ -43,8 +43,8 @@ namespace chess
         piece_ptr& piece(const position_type& pos);
         const piece_ptr& piece(const position_type& pos) const;
 
-        // We 
         bool has_piece(const position_type& pos, color c) const;
+        bool check_bounds(const position_type& pos) const;
 
         void print_separator(std::ostream& out) const;
 

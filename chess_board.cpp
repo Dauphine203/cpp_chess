@@ -85,7 +85,8 @@ namespace chess
         chess_piece* pce = piece(from);
         if (pce)
         {
-            return pce->can_move(to, m_callback);
+            bool valid = check_bounds(from) && check_bounds(to);
+            return valid && pce->can_move(to, m_callback);
         }
         else
         {
@@ -150,6 +151,11 @@ namespace chess
     {
         piece_ptr pce = piece(pos);
         return pce && (c == 'a' || pce->get_color() == c);
+    }
+
+    bool chess_board::check_bounds(const position_type& pos) const
+    {
+        return pos.first >= 'a' && pos.first <= 'h' && pos.second < 8u;
     }
 
     void chess_board::print_separator(std::ostream& out) const
