@@ -78,13 +78,22 @@ int main(int /*argc*/, char** /*argv*/)
     chess::chess_board board;
     board.print(std::cout);
     std::string input;
-    std::cout << "Enter your move: ro,co - rd,cd" << std::endl;
+    std::cout << "Enter your move: co,ro - cd,rd" << std::endl;
     std::getline(std::cin, input);
     chess::move_type pos;
     try
     {
         chess::get_move(input, pos);
-        std::cout << "Legal move: " << board.can_move(pos.first, pos.second) << std::endl;
+        bool legal_move = board.can_move(pos.first, pos.second);
+        if (legal_move)
+        {
+            board.move(pos.first, pos.second);
+            board.print(std::cout);
+        }
+        else
+        {
+            std::cout << "illegal move" << std::endl;
+        }
     }
     catch(std::exception& e)
     {

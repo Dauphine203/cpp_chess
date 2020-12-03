@@ -109,7 +109,7 @@ namespace chess
         }
         piece(to) = pce;
         piece(from) = nullptr;
-
+        pce-> notify_move();
     }
 
     void chess_board::print(std::ostream& out) const
