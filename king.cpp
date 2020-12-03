@@ -13,5 +13,10 @@ namespace chess
         // it later
         return false;
     }
+
+    void king::print(std::ostream& out) const
+    {
+        out << "K" << get_color();
+    }
 }
 

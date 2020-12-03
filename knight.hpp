@@ -14,6 +14,7 @@ namespace chess
         virtual ~knight() = default;
         
         bool can_move(const position_type& new_pos) const override;
+        void print(std::ostream& out) const override;
     };
 }
 

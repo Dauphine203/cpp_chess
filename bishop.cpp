@@ -13,5 +13,10 @@ namespace chess
         // it later
         return false;
     }
+
+    void bishop::print(std::ostream& out) const
+    {
+        out << "B" << get_color();
+    }
 }
 

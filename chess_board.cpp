@@ -6,6 +6,14 @@ namespace chess
 {
     chess_board::chess_board()
     {
+        for(char i = 'a'; i != 'i'; ++i)
+        {
+            for (size_t j = 0; j < 8; ++j)
+            {
+                m_board[i][j] = nullptr;
+            }
+        }
+
         m_board['a'][0] = make_rook('w', {'a', 0});
         m_board['b'][0] = make_knight('w', {'b', 0});
         m_board['c'][0] = make_bishop('w', {'c', 0});
@@ -87,6 +95,31 @@ namespace chess
 
     }
 
+    void chess_board::print(std::ostream& out) const
+    {
+        print_separator(out);
+        for (size_t i = 0; i < 8; ++i)
+        {
+            out << "|  " << 8 - i << " |";
+            for (char j = 'a'; j != 'i'; ++j)
+            {
+                chess_piece* pce = m_board[j][7 - i];
+                if (pce != nullptr)
+                {
+                    out << " " << (*pce) << " |";
+                }
+                else
+                {
+                    out << "    |";
+                }
+            }
+            out << std::endl;
+            print_separator(out);
+        }
+        out << "|    |  a |  b |  c |  d |  e |  f |  g |  h | " << std::endl;
+        print_separator(out);
+    }
+
     chess_board::piece_ptr& chess_board::piece(const position_type& pos)
     {
         return m_board[pos.first][pos.second];
@@ -95,6 +128,11 @@ namespace chess
     const chess_board::piece_ptr& chess_board::piece(const position_type& pos) const
     {
         return m_board[pos.first][pos.second];
+    }
+
+    void chess_board::print_separator(std::ostream& out) const
+    {
+        out << "+----+----+----+----+----+----+----+----+----+ " << std::endl;
     }
 }
 

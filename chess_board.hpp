@@ -1,6 +1,8 @@
 #ifndef CHESS_BOARD_HPP
 #define CHESS_BOARD_HPP
 
+#include <ostream>
+
 #include "chess_array.hpp"
 #include "chess_piece.hpp"
 
@@ -30,6 +32,8 @@ namespace chess
         bool can_move(const position_type& from, const position_type& to) const;
         void move(const position_type& from, const position_type& to);
 
+        void print(std::ostream& out) const;
+
     private:
 
         using piece_ptr = chess_piece*;
@@ -38,6 +42,8 @@ namespace chess
         // a different address, making it point to another memory location.
         piece_ptr& piece(const position_type& pos);
         const piece_ptr& piece(const position_type& pos) const;
+
+        void print_separator(std::ostream& out) const;
 
         chess_array<std::array<chess_piece*, 8>> m_board;
     };

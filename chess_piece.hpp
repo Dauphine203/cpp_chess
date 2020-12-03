@@ -2,6 +2,7 @@
 #define CHESS_PIECE_HPP
 
 #include <cstddef>
+#include <ostream>
 #include <utility>
 
 namespace chess
@@ -35,6 +36,7 @@ namespace chess
 
         // This is specific to the type of piece
         virtual bool can_move(const position_type& new_pos) const = 0;
+        virtual void print(std::ostream& out) const = 0;
 
     protected:
 
@@ -48,6 +50,8 @@ namespace chess
         color m_color;
         position_type m_position;
     };
+
+    std::ostream& operator<<(std::ostream& out, const chess_piece& pce);
 }
 
 #endif

@@ -75,6 +75,8 @@ namespace chess
 
 int main(int /*argc*/, char** /*argv*/)
 {
+    chess::chess_board board;
+    board.print(std::cout);
     std::string input;
     std::cout << "Enter your move: ro,co - rd,cd" << std::endl;
     std::getline(std::cin, input);
