@@ -69,6 +69,17 @@ namespace chess
         // don't want this class to be instantiated by clients
         chess_piece(color c, const position_type& pos);
 
+        // The queen gathers rook and bishop move abilities. These
+        // methods avoid duplicating code in inheriting classes.
+        bool check_col_move(const position_type& new_pos,
+                            const has_piece_callback& cb) const;
+
+        bool check_row_move(const position_type& new_pos,
+                            const has_piece_callback& cb) const;
+
+        bool check_diag_move(const position_type& new_pos,
+                             const has_piece_callback& cb) const;
+
     private:
 
         color m_color;
