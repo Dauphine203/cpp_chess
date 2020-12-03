@@ -16,6 +16,12 @@ namespace chess
         bool can_move(const position_type& new_pos,
                       const has_piece_callback& cb) const override;
         void print(std::ostream& out) const override;
+
+    private:
+
+        // The check in can_move depends on whether it's the first move
+        // of the pawn, so we need an additional data member.
+        bool m_has_moved;
     };
 }
 
