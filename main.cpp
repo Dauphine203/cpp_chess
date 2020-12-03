@@ -67,9 +67,9 @@ namespace chess
 
         pos.first.first = tmp[0][0];
         // Users enter position starting at 1 while C++ arrays start at 0
-        pos.first.second = stoi(tmp[1]) - 1;
+        pos.first.second = stoul(tmp[1]) - 1;
         pos.second.first = tmp[2][0];
-        pos.second.second = stoi(tmp[3]) - 1;
+        pos.second.second = stoul(tmp[3]) - 1;
     }
 }
 
@@ -84,6 +84,7 @@ int main(int /*argc*/, char** /*argv*/)
     try
     {
         chess::get_move(input, pos);
+        std::cout << "Legal move: " << board.can_move(pos.first, pos.second) << std::endl;
     }
     catch(std::exception& e)
     {

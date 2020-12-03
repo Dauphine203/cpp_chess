@@ -34,6 +34,7 @@ namespace chess
         chess_piece& operator=(chess_piece&&) = delete;
 
         color get_color() const;
+        color get_opposite_color() const;
 
         const position_type& get_position() const;
         void move(const position_type& new_pos);

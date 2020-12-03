@@ -7,6 +7,11 @@ namespace chess
         return m_color;
     }
 
+    color chess_piece::get_opposite_color() const
+    {
+        return m_color == 'b' ? 'w' : 'b';
+    }
+
     const position_type& chess_piece::get_position() const
     {
         return m_position;
