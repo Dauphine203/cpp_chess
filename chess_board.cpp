@@ -81,6 +81,8 @@ namespace chess
         // Initiliazes the king's "trackers"
         p_white_king = m_board['e'][0];
         p_black_king = m_board['e'][7];
+
+        m_current_color = 'w';
     }
 
     chess_board::~chess_board()
@@ -101,6 +103,8 @@ namespace chess
         if (pce)
         {
             bool valid = check_bounds(from) && check_bounds(to);
+            // Checks that the user doe snot try to move an opponent piece
+            valid &= pce->get_color() == m_current_color;
             valid &= pce->can_move(to, m_callback);
             valid &= check_in_check(pce, to);
             return valid;
@@ -138,6 +142,7 @@ namespace chess
         piece(to) = pce;
         piece(from) = nullptr;
         pce->notify_move();
+        m_current_color = pce->get_opposite_color();
     }
 
     void chess_board::print(std::ostream& out) const

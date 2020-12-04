@@ -69,6 +69,8 @@ namespace chess
         piece_list m_black_pieces;
         piece_ptr p_white_king;
         piece_ptr p_black_king;
+
+        color m_current_color;
     };
 }
 

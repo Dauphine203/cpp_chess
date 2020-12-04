@@ -76,29 +76,37 @@ namespace chess
 int main(int /*argc*/, char** /*argv*/)
 {
     chess::chess_board board;
-    board.print(std::cout);
-    std::string input;
-    std::cout << "Enter your move: co,ro - cd,rd" << std::endl;
-    std::getline(std::cin, input);
-    chess::move_type pos;
-    try
+    while (true)
     {
-        chess::get_move(input, pos);
-        bool legal_move = board.can_move(pos.first, pos.second);
-        if (legal_move)
+        board.print(std::cout);
+        std::string input;
+        std::cout << "Enter your move: co,ro - cd,rd or type exit to quit the game" << std::endl;
+        std::getline(std::cin, input);
+        if (input == "exit")
         {
-            board.move(pos.first, pos.second);
-            board.print(std::cout);
+            break;
         }
-        else
+        chess::move_type pos;
+        try
         {
-            std::cout << "illegal move" << std::endl;
+            chess::get_move(input, pos);
+            bool legal_move = board.can_move(pos.first, pos.second);
+            if (legal_move)
+            {
+                board.move(pos.first, pos.second);
+                board.print(std::cout);
+            }
+            else
+            {
+                std::cout << "illegal move" << std::endl;
+            }
+        }
+        catch(std::exception& e)
+        {
+            std::cout << e.what() << std::endl;
         }
     }
-    catch(std::exception& e)
-    {
-        std::cout << e.what() << std::endl;
-    }
+
     return 0;
 }
 
