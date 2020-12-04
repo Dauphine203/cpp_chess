@@ -45,8 +45,9 @@ namespace chess
 
         bool has_piece(const position_type& pos, color c) const;
         bool check_bounds(const position_type& pos) const;
-        // Checkes that the king of color c is not in check
-        bool check_in_check(color c) const;
+        // Checkes that the king of color opposite to piece is not in check
+        // if piece moves to new_pos.
+        bool check_in_check(chess_piece* piece, const position_type& new_pos) const;
 
         void print_separator(std::ostream& out) const;
 

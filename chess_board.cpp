@@ -102,9 +102,7 @@ namespace chess
         {
             bool valid = check_bounds(from) && check_bounds(to);
             valid &= pce->can_move(to, m_callback);
-            // valid &= check_in_check();
-            // Problem: check_in_check should be called AFTER
-            // the piece has moved (if the move is valid so far).
+            valid &= check_in_check(pce, to);
             return valid;
         }
         else
@@ -124,11 +122,22 @@ namespace chess
         chess_piece* must_die = piece(to);
         if (must_die != nullptr)
         {
+            color c = must_die->get_color();
+            if (c == 'b')
+            {
+                auto it = std::find(m_black_pieces.begin(), m_black_pieces.end(), must_die);
+                *it = nullptr;
+            }
+            else
+            {
+                auto it = std::find(m_white_pieces.begin(), m_white_pieces.end(), must_die);
+                *it = nullptr;
+            }
             delete must_die;
         }
         piece(to) = pce;
         piece(from) = nullptr;
-        pce-> notify_move();
+        pce->notify_move();
     }
 
     void chess_board::print(std::ostream& out) const
@@ -177,12 +186,19 @@ namespace chess
         return pos.first >= 'a' && pos.first <= 'h' && pos.second < 8u;
     }
 
-    bool chess_board::check_in_check(color c) const
+    bool chess_board::check_in_check(chess_piece* piece, const position_type& new_pos) const
     {
         bool valid = true;
+        color c = piece->get_opposite_color();
+        // Let's emulate a move of piece to new_pos and check whether the king of opposite
+        // color is in check. To do so, we temporarily set the position of piece to new_pos,
+        // perform the check, and reset back piece to its original position
+        // Takes a copy, since we're going to alter the internal position of piece after
+        position_type current_pos = piece->get_position();
+        piece->move(new_pos);
         // The two branches are very similar, the code should be factorized
         // out. But let's do this once the method is fixed.
-        if (color == 'b')
+        if (c == 'b')
         {
             for (auto p: m_white_pieces)
             {
@@ -196,6 +212,7 @@ namespace chess
                 valid &= !can_move(p->get_position(), p_white_king->get_position());
             }
         }
+        piece->move(current_pos);
         return valid;
     }
 
