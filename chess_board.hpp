@@ -48,7 +48,7 @@ namespace chess
         bool check_bounds(const position_type& pos) const;
         // Checks that the king of color opposite to piece is not in check
         // if piece moves to new_pos.
-        bool check_in_check(piece_ptr* piece, const position_type& new_pos) const;
+        bool check_in_check(piece_ptr piece, const position_type& new_pos) const;
         // Checkes that king is not in check from one piece in l
         bool check_in_check(const piece_list& l, piece_ptr king) const;
 

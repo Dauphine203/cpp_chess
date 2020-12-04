@@ -215,7 +215,7 @@ namespace chess
         {
             if (p != nullptr)
             {
-                valid &= !l->can_move(king->get_position());
+                valid &= !p->can_move(king->get_position(), m_callback);
             }
         }
         return valid;
