@@ -186,7 +186,7 @@ namespace chess
         return pos.first >= 'a' && pos.first <= 'h' && pos.second < 8u;
     }
 
-    bool chess_board::check_in_check(chess_piece* piece, const position_type& new_pos) const
+    bool chess_board::check_in_check(piece_ptr piece, const position_type& new_pos) const
     {
         bool valid = true;
         color c = piece->get_opposite_color();
@@ -196,23 +196,28 @@ namespace chess
         // Takes a copy, since we're going to alter the internal position of piece after
         position_type current_pos = piece->get_position();
         piece->move(new_pos);
-        // The two branches are very similar, the code should be factorized
-        // out. But let's do this once the method is fixed.
         if (c == 'b')
         {
-            for (auto p: m_white_pieces)
-            {
-                valid &= !can_move(p->get_position(), p_black_king->get_position());
-            }
+            valid = check_in_check(m_white_pieces, p_black_king);
         }
         else
         {
-            for (auto p: m_black_pieces)
-            {
-                valid &= !can_move(p->get_position(), p_white_king->get_position());
-            }
+            valid = check_in_check(m_black_pieces, p_white_king);
         }
         piece->move(current_pos);
+        return valid;
+    }
+
+    bool chess_board::check_in_check(const piece_list& l, piece_ptr king) const
+    {
+        bool valid = true;
+        for (auto p: l)
+        {
+            if (p != nullptr)
+            {
+                valid &= !l->can_move(king->get_position());
+            }
+        }
         return valid;
     }
 
