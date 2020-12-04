@@ -66,6 +66,21 @@ namespace chess
         // don't bind values to arguments of the function.
         // More on bind can be found at https://en.cppreference.com/w/cpp/utility/functional/bind
         m_callback = std::bind(&chess_board::has_piece, this, _1, _2);
+
+        // Initializes the white and black pieces lists
+        auto white_it = m_white_pieces.begin();
+        auto black_it = m_black_pieces.begin();
+        for (const auto& c: m_board)
+        {
+            *white_it++ = c[0];
+            *white_it++ = c[1];
+            *black_it++ = c[6];
+            *black_it++ = c[7];
+        }
+
+        // Initiliazes the king's "trackers"
+        p_white_king = m_board['e'][0];
+        p_black_king = m_board['e'][7];
     }
 
     chess_board::~chess_board()
@@ -86,7 +101,11 @@ namespace chess
         if (pce)
         {
             bool valid = check_bounds(from) && check_bounds(to);
-            return valid && pce->can_move(to, m_callback);
+            valid &= pce->can_move(to, m_callback);
+            // valid &= check_in_check();
+            // Problem: check_in_check should be called AFTER
+            // the piece has moved (if the move is valid so far).
+            return valid;
         }
         else
         {
@@ -156,6 +175,28 @@ namespace chess
     bool chess_board::check_bounds(const position_type& pos) const
     {
         return pos.first >= 'a' && pos.first <= 'h' && pos.second < 8u;
+    }
+
+    bool chess_board::check_in_check(color c) const
+    {
+        bool valid = true;
+        // The two branches are very similar, the code should be factorized
+        // out. But let's do this once the method is fixed.
+        if (color == 'b')
+        {
+            for (auto p: m_white_pieces)
+            {
+                valid &= !can_move(p->get_position(), p_black_king->get_position());
+            }
+        }
+        else
+        {
+            for (auto p: m_black_pieces)
+            {
+                valid &= !can_move(p->get_position(), p_white_king->get_position());
+            }
+        }
+        return valid;
     }
 
     void chess_board::print_separator(std::ostream& out) const

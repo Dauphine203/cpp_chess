@@ -45,6 +45,8 @@ namespace chess
 
         bool has_piece(const position_type& pos, color c) const;
         bool check_bounds(const position_type& pos) const;
+        // Checkes that the king of color c is not in check
+        bool check_in_check(color c) const;
 
         void print_separator(std::ostream& out) const;
 
@@ -53,6 +55,16 @@ namespace chess
         // instantiate it each time we need to call can_move. This is more
         // efficient.
         has_piece_callback m_callback;
+
+        // In order to check the move of a king, we must track
+        // the opposite pieces and the king's position
+        // Notice that since we store pointers, once the containers
+        // are initialized we never need to update them (except
+        // when a piece dies, we have to reset the pointer to nullptr).
+        std::array<chess_piece*, 16> m_white_pieces;
+        std::array<chess_piece*, 16> m_black_pieces;
+        chess_piece* p_white_king;
+        chess_piece* p_black_king;
     };
 }
 
