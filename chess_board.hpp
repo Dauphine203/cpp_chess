@@ -37,6 +37,7 @@ namespace chess
     private:
 
         using piece_ptr = chess_piece*;
+        using piece_list = std::array<piece_ptr, 16>;
 
         // Yes, reference on pointer ;). This allows assigning the pointer
         // a different address, making it point to another memory location.
@@ -45,6 +46,11 @@ namespace chess
 
         bool has_piece(const position_type& pos, color c) const;
         bool check_bounds(const position_type& pos) const;
+        // Checks that the king of color opposite to piece is not in check
+        // if piece moves to new_pos.
+        bool check_in_check(piece_ptr* piece, const position_type& new_pos) const;
+        // Checkes that king is not in check from one piece in l
+        bool check_in_check(const piece_list& l, piece_ptr king) const;
 
         void print_separator(std::ostream& out) const;
 
@@ -53,6 +59,16 @@ namespace chess
         // instantiate it each time we need to call can_move. This is more
         // efficient.
         has_piece_callback m_callback;
+
+        // In order to check the move of a king, we must track
+        // the opposite pieces and the king's position
+        // Notice that since we store pointers, once the containers
+        // are initialized we never need to update them (except
+        // when a piece dies, we have to reset the pointer to nullptr).
+        piece_list m_white_pieces;
+        piece_list m_black_pieces;
+        piece_ptr p_white_king;
+        piece_ptr p_black_king;
     };
 }
 

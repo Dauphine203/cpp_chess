@@ -66,6 +66,21 @@ namespace chess
         // don't bind values to arguments of the function.
         // More on bind can be found at https://en.cppreference.com/w/cpp/utility/functional/bind
         m_callback = std::bind(&chess_board::has_piece, this, _1, _2);
+
+        // Initializes the white and black pieces lists
+        auto white_it = m_white_pieces.begin();
+        auto black_it = m_black_pieces.begin();
+        for (const auto& c: m_board)
+        {
+            *white_it++ = c[0];
+            *white_it++ = c[1];
+            *black_it++ = c[6];
+            *black_it++ = c[7];
+        }
+
+        // Initiliazes the king's "trackers"
+        p_white_king = m_board['e'][0];
+        p_black_king = m_board['e'][7];
     }
 
     chess_board::~chess_board()
@@ -86,7 +101,9 @@ namespace chess
         if (pce)
         {
             bool valid = check_bounds(from) && check_bounds(to);
-            return valid && pce->can_move(to, m_callback);
+            valid &= pce->can_move(to, m_callback);
+            valid &= check_in_check(pce, to);
+            return valid;
         }
         else
         {
@@ -105,11 +122,22 @@ namespace chess
         chess_piece* must_die = piece(to);
         if (must_die != nullptr)
         {
+            color c = must_die->get_color();
+            if (c == 'b')
+            {
+                auto it = std::find(m_black_pieces.begin(), m_black_pieces.end(), must_die);
+                *it = nullptr;
+            }
+            else
+            {
+                auto it = std::find(m_white_pieces.begin(), m_white_pieces.end(), must_die);
+                *it = nullptr;
+            }
             delete must_die;
         }
         piece(to) = pce;
         piece(from) = nullptr;
-        pce-> notify_move();
+        pce->notify_move();
     }
 
     void chess_board::print(std::ostream& out) const
@@ -156,6 +184,41 @@ namespace chess
     bool chess_board::check_bounds(const position_type& pos) const
     {
         return pos.first >= 'a' && pos.first <= 'h' && pos.second < 8u;
+    }
+
+    bool chess_board::check_in_check(piece_ptr piece, const position_type& new_pos) const
+    {
+        bool valid = true;
+        color c = piece->get_opposite_color();
+        // Let's emulate a move of piece to new_pos and check whether the king of opposite
+        // color is in check. To do so, we temporarily set the position of piece to new_pos,
+        // perform the check, and reset back piece to its original position
+        // Takes a copy, since we're going to alter the internal position of piece after
+        position_type current_pos = piece->get_position();
+        piece->move(new_pos);
+        if (c == 'b')
+        {
+            valid = check_in_check(m_white_pieces, p_black_king);
+        }
+        else
+        {
+            valid = check_in_check(m_black_pieces, p_white_king);
+        }
+        piece->move(current_pos);
+        return valid;
+    }
+
+    bool chess_board::check_in_check(const piece_list& l, piece_ptr king) const
+    {
+        bool valid = true;
+        for (auto p: l)
+        {
+            if (p != nullptr)
+            {
+                valid &= !l->can_move(king->get_position());
+            }
+        }
+        return valid;
     }
 
     void chess_board::print_separator(std::ostream& out) const
